@@ -1,16 +1,19 @@
 class Solution {
 public:
-    bool searchMatrix(vector<vector<int>>& arr, int target) {
+    bool searchMatrix(vector<vector<int>>& arr, int tar) {
         int m=arr.size();
         int n=arr[0].size();
-        for(int i=0;i<m;i++)
+        int j=n-1;
+        int i=0;
+        while(i<m &&j>=0)
         {
-            for(int j=0;j<n;j++)
+            if(arr[i][j]>tar)
             {
-                if(arr[i][j]==target)
-                return true;
+                j--;
             }
+            else if(arr[i][j]<tar) i++;
+            else return true;
         }
-       return false; 
+    return false;     
     }
 };
