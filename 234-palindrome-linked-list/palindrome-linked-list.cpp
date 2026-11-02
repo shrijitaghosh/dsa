@@ -1,65 +1,37 @@
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode() : val(0), next(nullptr) {}
- *     ListNode(int x) : val(x), next(nullptr) {}
- *     ListNode(int x, ListNode *next) : val(x), next(next) {}
- * };
- */
 class Solution {
 public:
-    ListNode* reverseList(ListNode* head) {
-        // Using recursion
-        if (head == NULL || head->next == NULL)
-            return head;
-
-        ListNode* a = head->next;
-        ListNode* newhead = reverseList(a);
-
-        a->next = head;
-        head->next = NULL;
-
-        return newhead;
-    }
-
     bool isPalindrome(ListNode* head) {
-
-        ListNode* og = head;
-        ListNode* temp = NULL;
-        ListNode* tail = NULL;
-
-        // Creating a separate copy
-        while (og != NULL) {
-            ListNode* node = new ListNode(og->val);
-
-            if (temp == NULL) {
-                temp = node;
-                tail = node;
-            }
-            else {
-                tail->next = node;
-                tail = node;
-            }
-
-            og = og->next;
+        if (!head || !head->next) return true;
+        
+        // 1. Find the middle of the linked list
+        ListNode* slow = head;
+        ListNode* fast = head;
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
         }
-
-        // Reverse the copied list
-        ListNode* rev = reverseList(temp);
-
-        // Compare original and reversed copies
-        og = head;
-
-        while (og != NULL) {
-            if (og->val != rev->val)
+        
+        // 2. Reverse the second half of the list
+        ListNode* prev = nullptr;
+        ListNode* curr = slow;
+        while (curr) {
+            ListNode* nextNode = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = nextNode;
+        }
+        
+        // 3. Compare the first half and the reversed second half
+        ListNode* firstHalf = head;
+        ListNode* secondHalf = prev; // prev is the head of the reversed half
+        while (secondHalf) {
+            if (firstHalf->val != secondHalf->val) {
                 return false;
-
-            og = og->next;
-            rev = rev->next;
+            }
+            firstHalf = firstHalf->next;
+            secondHalf = secondHalf->next;
         }
-
+        
         return true;
     }
 };
